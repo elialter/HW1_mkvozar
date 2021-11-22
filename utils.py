@@ -1,4 +1,5 @@
 import numpy as np
+import math as m
 
 
 def sigmoid(x):
@@ -10,10 +11,10 @@ def sigmoid(x):
      Returns
      -------
      np.array
-         sigmoid of the input x
-
+         sigmoid of the input
      """
-    raise NotImplementedError("To be implemented")
+    return 1 / (1 + m.exp(-x))
+#    raise NotImplementedError("To be implemented")
 
 
 def sigmoid_prime(x):
@@ -26,9 +27,10 @@ def sigmoid_prime(x):
          -------
          np.array
              derivative of sigmoid of the input x
-
     """
-    raise NotImplementedError("To be implemented")
+    sig_prime = sigmoid(x) * (1 - sigmoid(x))
+    return sig_prime
+#    raise NotImplementedError("To be implemented")
 
 
 def random_weights(sizes):
@@ -41,9 +43,15 @@ def random_weights(sizes):
          -------
          list
              list of xavier initialized np arrays weight matrices
-
     """
-    raise NotImplementedError("To be implemented")
+    xavier_list = []
+    loop_size = len(sizes) - 2
+    for i in range(1, loop_size):
+        xavier_matrix += xavier_initialization(sizes[i], sizes[i+1])
+
+    return xavier_matrix
+
+#    raise NotImplementedError("To be implemented")
 
 
 def zeros_weights(sizes):
@@ -56,9 +64,14 @@ def zeros_weights(sizes):
          -------
          list
              list of zero np arrays weight matrices
-
     """
-    raise NotImplementedError("To be implemented")
+    zero_list = []
+    loop_size = len(sizes) - 2
+    for i in range(1, loop_size):
+        zero_list += np.zeros(sizes[i], sizes[i+1])
+
+    return zero_list
+#    raise NotImplementedError("To be implemented")
 
 
 def zeros_biases(list):
@@ -73,7 +86,13 @@ def zeros_biases(list):
              list of zero np arrays bias matrices
 
     """
-    raise NotImplementedError("To be implemented")
+    zero_list = []
+    loop_size = len(list) - 1
+    for i in range(1, loop_size):
+        zero_list += np.zeros(list[i])
+
+    return zero_list
+#    raise NotImplementedError("To be implemented")
 
 
 def create_batches(data, labels, batch_size):
@@ -89,8 +108,29 @@ def create_batches(data, labels, batch_size):
          list
              list of tuples of (data batch of batch_size, labels batch of batch_size)
 
+
     """
-    raise NotImplementedError("To be implemented")
+    data_list = []
+    labels_list = []
+    if len(data) % batch_size == 0:
+        data_list = np.split(data, len(data) / batch_size)
+        labels_list = np.split(labels, len(labels) / batch_size)
+
+    else:
+        eff_len = len(data) - (len(data) % batch_size)
+        eff_data = data[0:eff_len]
+        eff_labels = labels[0:eff_len]
+        data_list = np.split(eff_data, eff_len / batch_size)
+        data_list += data[eff_len:len(data)]
+        labels_list = np.split(eff_labels, eff_len / batch_size)
+        labels_list += labels[eff_len:len(data)]
+
+    final_list = []
+    for i in range(0, len(labels_list)):
+        final_list += (data_list[i], labels_list[i])
+
+    return final_list
+#    raise NotImplementedError("To be implemented")
 
 
 def add_elementwise(list1, list2):
@@ -105,7 +145,13 @@ def add_elementwise(list1, list2):
          list
              list of sum of each two elements by index
     """
-    raise NotImplementedError("To be implemented")
+    sum_list = []
+    for i in range(0, len(list1)):
+        sum_list += list1[i] + list2[i]
+
+    return sum_list
+
+#    raise NotImplementedError("To be implemented")
 
 def xavier_initialization(m, n):
     xavier = 1 / (m ** 0.5)
