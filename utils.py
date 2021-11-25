@@ -46,8 +46,8 @@ def random_weights(sizes):
     """
     xavier_list = []
     loop_size = len(sizes) - 2
-    for i in range(1, loop_size):
-        xavier_list += xavier_initialization(sizes[i], sizes[i+1])
+    for i in range(0, loop_size):
+        xavier_list.append(xavier_initialization(sizes[i], sizes[i+1]))
 
     return xavier_list
 
@@ -68,7 +68,7 @@ def zeros_weights(sizes):
     zero_list = []
     loop_size = len(sizes) - 2
     for i in range(1, loop_size):
-        zero_list += np.zeros(sizes[i], sizes[i+1])
+        zero_list.append(np.zeros(sizes[i], sizes[i+1]))
 
     return zero_list
 #    raise NotImplementedError("To be implemented")
@@ -89,7 +89,7 @@ def zeros_biases(list):
     zero_list = []
     loop_size = len(list) - 1
     for i in range(1, loop_size):
-        zero_list += np.zeros(list[i])
+        zero_list.append(np.zeros(list[i]))
 
     return zero_list
 #    raise NotImplementedError("To be implemented")
@@ -121,13 +121,13 @@ def create_batches(data, labels, batch_size):
         eff_data = data[0:eff_len]
         eff_labels = labels[0:eff_len]
         data_list = np.split(eff_data, eff_len / batch_size)
-        data_list += data[eff_len:len(data)]
+        data_list.append(data[eff_len:len(data)])
         labels_list = np.split(eff_labels, eff_len / batch_size)
-        labels_list += labels[eff_len:len(data)]
+        labels_list.append(labels[eff_len:len(data)])
 
     final_list = []
     for i in range(0, len(labels_list)):
-        final_list += (data_list[i], labels_list[i])
+        final_list.append((data_list[i], labels_list[i]))
 
     return final_list
 #    raise NotImplementedError("To be implemented")
