@@ -127,7 +127,7 @@ def create_batches(data, labels, batch_size):
 
     final_list = []
     for i in range(0, len(labels_list)):
-        final_list.append((data_list[i], labels_list[i]))
+        final_list.append((list(data_list[i]), list(labels_list[i])))
 
     return final_list
 #    raise NotImplementedError("To be implemented")

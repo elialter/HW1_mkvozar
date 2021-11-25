@@ -10,7 +10,11 @@ def dist_cpu(A, B, p):
      np.array
          p-dist between A and B
      """
-	pass
+    sum = 0
+    for i in range(0,1000):
+        for j in range(0, 1000):
+            sum += pow((A[i][j] - B[i][j]), p)
+    return pow(sum, 1/(float(p)))
 
 
 
@@ -22,7 +26,11 @@ def dist_numba(A, B, p):
      np.array
          p-dist between A and B
      """
-	pass
+    sum = 0
+    for i in prange(1000):
+        for j in prange(1000):
+            sum += pow((A[i][j] - B[i][j]), p)
+    return pow(sum, 1 / (float(p)))
 
 def dist_gpu(A, B, p):
 """
