@@ -47,9 +47,9 @@ def random_weights(sizes):
     xavier_list = []
     loop_size = len(sizes) - 2
     for i in range(1, loop_size):
-        xavier_matrix += xavier_initialization(sizes[i], sizes[i+1])
+        xavier_list += xavier_initialization(sizes[i], sizes[i+1])
 
-    return xavier_matrix
+    return xavier_list
 
 #    raise NotImplementedError("To be implemented")
 

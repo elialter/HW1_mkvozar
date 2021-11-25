@@ -22,7 +22,7 @@ def matmul_kernel(A, C):
 #this is the comparison function - keep it as it is, don't change X or Y.
 def matmul_comparison():
     X = np.random.randn(784, 128)
-	Xt = X.copy().transpose()
+    Xt = X.copy().transpose()
     def timer(f, functionParameters):
         return min(timeit.Timer(lambda: f(X) if functionParameters == 1 else f(X,Xt)).repeat(3, 100))
 
