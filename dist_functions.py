@@ -13,7 +13,7 @@ def dist_cpu(A, B, p):
     sum = 0
     for i in range(0,1000):
         for j in range(0, 1000):
-            sum += pow((A[i][j] - B[i][j]), p)
+            sum += pow(abs(A[i][j] - B[i][j]), p)
     return pow(sum, 1/(float(p)))
 
 
@@ -26,20 +26,24 @@ def dist_numba(A, B, p):
      np.array
          p-dist between A and B
      """
-    sum = 0
+    sum = 0.0
     for i in prange(1000):
         for j in prange(1000):
-            sum += pow((A[i][j] - B[i][j]), p)
-    return pow(sum, 1 / (float(p)))
+            tmp = A[i][j] - B[i][j]
+            if tmp > 0:
+                sum += tmp**p
+            else:
+                sum += (tmp * -1) ** p
+    return sum**(1 / p)
 
 def dist_gpu(A, B, p):
-"""
+    """
      Returns
      -------
      np.array
          p-dist between A and B
-     """
-   pass
+    """
+    pass
 
 @cuda.jit
 def dist_kernel(A, B, p, C):
