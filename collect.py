@@ -5,7 +5,7 @@ import numpy as np
 
 
 def load_mnist():
-    with gzip.open('../OneDrive/שולחן העבודה/לימודים/תכנות מקבילי ומבוזר/HW/HW1/hw1/data/mnist.pkl.gz', 'rb') as f:
+    with gzip.open('data/mnist.pkl.gz', 'rb') as f:
         datasets = pickle.load(f, encoding='latin1')
 
     return [vectorized_results(data) for data in datasets]
