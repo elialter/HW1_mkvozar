@@ -1,3 +1,4 @@
+import math
 import numpy as np
 from numba import njit, cuda
 import timeit
@@ -5,10 +6,13 @@ import timeit
 
 def matmul_transpose_trivial(X):
     result = np.zeros((len(X), len(X)), dtype=np.float64)
-    for i in range(0, len(X)):
-        for k in range(0, len(X[0])):
-            for j in range(0, len(X)):
-                result[i][j] += X[i][k] * X[j][k]
+    for i in range(0, X.shape[0]):
+        for j in range(0, i+1):
+            partial_sum = 0
+            for k in range(0, X.shape[1]):
+                partial_sum += X[i][k] * X[j][k]
+            result[i][j] = partial_sum
+            result[j][i] = partial_sum
     return result
 
 @njit
@@ -26,11 +30,13 @@ def matmul_transpose_numba(X):
 
 
 def matmul_transpose_gpu(X):
-    resultArray = np.zeros((X.shape[0], X.shape[0]), dtype=np.float64)
-    X_gpu = cuda.to_device(X)
+    resultArray=np.zeros((X.shape[0],X.shape[0]),dtype=np.float64)
+    threadsperblock=1024
+    blockspergrid = 1
+    X_gpu=cuda.to_device(X)
     resultArr_gpu = cuda.to_device(resultArray)
-    matmul_kernel[1, 1024](X_gpu, resultArr_gpu)
-    resultArray = resultArr_gpu.copy_to_host(resultArray)
+    matmul_kernel[blockspergrid,threadsperblock](X_gpu,resultArr_gpu)
+    resultArray=resultArr_gpu.copy_to_host(resultArray)
     return resultArray
 
 @cuda.jit
